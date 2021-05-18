@@ -3,7 +3,7 @@
   <div class="citytime">
   <h2>
     <span><i class="fas fa-map-marker-alt"></i></span>
-    city(country)
+        {{city}}{{(country)}}
   </h2>
 <div>{{ currentDate }}</div>
  
@@ -22,9 +22,7 @@
 import moment from "moment"
 export default {
   name: 'SityTime',
-  props: {
-   
-  },
+  props: ["city" ,"country"],
    data: function () {
     return {
       currentDate: "",

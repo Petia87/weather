@@ -1,8 +1,8 @@
 <template>
 <div class="thirt">
-  <p>day</p>
-  <p><i class="fas fa-sun"></i></p>
-  <p>degree</p>
+  <p class="today">{{day}}</p>
+  <p class="sunfa">{{icon}}</p>
+  <p class="degreem">{{degree}}</p>
 </div>
 
 
@@ -12,9 +12,7 @@
 <script>
 export default {
   name: 'TheAWeekWeather',
-  props: {
-   
-  }
+  props: ["day","icon","degree"],
 }
 </script>
 
