@@ -1,6 +1,8 @@
 <template>
-<TheHeader/>
-  <ThePage/>
+<div class="mainBox">
+  <TheHeader/>
+  <ThePage/></div>
+
  
 
 </template>
@@ -34,11 +36,16 @@ export default {
     box-sizing: border-box;
    font-family: 'Open Sans', sans-serif;
 }
-
+.mainBox{
+  width: 60%;
+  margin: 0 auto;
+}
 body,div{
   margin: 0;
   padding: 0;
+
 }
+
 </style>
 
 

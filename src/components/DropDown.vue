@@ -1,6 +1,6 @@
 <template>
-  <select @change="OnChange" class="dropdown">
-    <option v-for="city in cityArr" :key="city" v-bind:value="city">
+  <select @change="onChange" class="dropdown">
+    <option v-for="city in cities" :key="city" v-bind:value="city.cityName">
       {{ city.cityName }}
     </option>
   </select>
@@ -11,22 +11,24 @@ import { countryList } from "../data/countries1.js";
 
 export default {
   name: "DropDown",
-  emits: ["cityArr", "selectedCity"],
+  emits: ["selectedCity"],
   props: {},
 
   data: function () {
     return {
-      cityArr: [],
-      selectedCity:"",
+      cities: [],
     };
   },
 
+/**
+ * Create cities 
+ */
   mounted() {
     for (let i = 0; i < countryList.length; i++) {
       let country = countryList[i];
       for (let j = 0; j < country.cities.length; j++) {
         let city = country.cities[j];
-        this.cityArr.push({
+        this.cities.push({
           cityName: city.name,
           countryName: country.name,
           countryCode: country.iso2,
@@ -34,10 +36,16 @@ export default {
       }
     }
   },
+  /**
+   * 
+   */
   methods: {
     onChange(eventInfo) {
-      this.selectedCity=eventInfo.target.value//find
-       this.$emit("selectedCity", this.selectedCity,this.cityArr)
+      let selectedCity = eventInfo.target.value;
+      let selectedCities = this.cities.find((cities) => {
+        return cities.cityName === selectedCity;
+      });
+      this.$emit("selectedCity", selectedCities);
     },
   },
 };
@@ -46,7 +54,11 @@ export default {
 
 
 <style scoped>
-.city {
-  padding: 5rem;
+.dropdown {
+  width: 80%;
+  padding: 0.5rem;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+  margin: 0.5rem;
 }
 </style>
