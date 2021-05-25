@@ -8,9 +8,9 @@
       v-bind:iconCurrent="iconCurrent"
     />
 
-    <div v-if="arr.length > 0" class="pageMain__weekForcast">
+    <div v-if="citiesReq.length > 0" class="pageMain__weekForcast">
       <WeekForcast
-        v-for="el in objArr"
+        v-for="el in citiesProp"
         :key="el"
         v-bind:day="el.datetime"
         v-bind:icon="el.weather.icon"
@@ -43,12 +43,12 @@ export default {
       city: "",
       country: "",
       selectedCities: [],
+      date: "",
       temp: 0,
       description: "",
-      date: "",
-      iconBig: "",
-      objArr: [],
-      arr: [],
+      iconCurrent: "",
+      citiesProp: [],
+      citiesReq: [],
     };
   },
   created() {
@@ -85,8 +85,8 @@ export default {
         })
         .then((data) => {
           this.currentRequest = data.data;
-          let dataObj = this.findCity();
-          this.setProperties(dataObj);
+          let citiesRequest = this.findCity();
+          this.setProperties(citiesRequest );
         })
         .catch(() => {});
     },
@@ -95,24 +95,24 @@ export default {
      * Find the city wiht selected name and compare with response
      */
     findCity() {
-      let dataObj = this.currentRequest.find((obj) => {
-        return obj.city_name === this.selectedCities.cityName;
+      let citiesRequest  = this.currentRequest.find((cities) => {
+        return cities.city_name === this.selectedCities.cityName;
       });
-      return dataObj;
+      return citiesRequest ;
     },
     /**
-     * Set up properties from the request data
+     * Set up properties from the cities request
      */
-    setProperties(dataObj) {
-      this.temp = dataObj.temp;
-      this.description = dataObj.weather.description;
-      this.iconBig = dataObj.weather.icon;
+    setProperties(citiesRequest ) {
+      this.temp = citiesRequest .temp;
+      this.description = citiesRequest .weather.description;
+      this.iconCurrent = citiesRequest .weather.icon;
     },
     /**
      * Get dayly weather response
      */
     getDailyWeatherResponse() {
-      this.objArr = [];
+      this.reset()
       fetch(
         `https://api.weatherbit.io/v2.0/forecast/daily?key=79bb1bf8c6394da3a3760df1b26bd53b&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}`
       )
@@ -122,12 +122,12 @@ export default {
 
         .then((result) => {
           if (result.city_name === this.selectedCities.cityName) {
-            this.arr = result.data;
+            this.citiesReq = result.data;
 
-            for (let i = 0; i < this.arr.length; i++) {
-              const el = this.arr[i];
-              this.objArr.push(el);
-              if (this.objArr.length > 4) {
+            for (let i = 0; i < this.citiesReq.length; i++) {
+              const el = this.citiesReq[i];
+              this.citiesProp.push(el);
+              if (this.citiesProp.length > 4) {
                 break;
               }
             }
@@ -136,9 +136,9 @@ export default {
 
         .catch(() => {});
     },
-    /* resize() {
-      this.objArr = [];
-    },*/
+    reset() {
+      this.citiesProp = [];
+    },
   },
 };
 </script>
