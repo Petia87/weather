@@ -2,21 +2,16 @@
   <div class="page-main">
     <DropDown @SelectedCity="onSelectedCity" />
     <CityTime v-bind:city="city" v-bind:country="country" />
-    <CurrentForcast
+    <CurrentForecast
       v-bind:temperature="temperature"
       v-bind:description="description"
       v-bind:iconCurrent="iconCurrent"
     />
 
     <div v-if="citiesInformation.length > 0" class="page-main__weekly-forcast">
-      <WeeklyForcast
-        v-for="el in citiesProperties"
-        :key="el"
-        v-bind:day="el.datetime"
-        v-bind:icon="el.weather.icon"
-        v-bind:minT="el.app_min_temp"
-        v-bind:maxT="el.app_max_temp"
-      />
+      <WeeklyForecast
+        v-bind:weeklyProperties="weeklyProperties"
+      ></WeeklyForecast>
     </div>
   </div>
 </template>
@@ -25,8 +20,8 @@
 import moment from "moment";
 import DropDown from "./DropDown.vue";
 import CityTime from "./CityTime.vue";
-import CurrentForcast from "./CurrentForcast.vue";
-import WeeklyForcast from "./WeeklyForcast.vue";
+import CurrentForecast from "./CurrentForecast.vue";
+import WeeklyForecast from "./WeeklyForecast.vue";
 
 export default {
   name: "ThePage",
@@ -34,8 +29,8 @@ export default {
   components: {
     DropDown,
     CityTime,
-    CurrentForcast,
-    WeeklyForcast,
+    CurrentForecast,
+    WeeklyForecast,
   },
 
   data: function () {
@@ -47,7 +42,7 @@ export default {
       temperature: 0,
       description: "",
       iconCurrent: "",
-      citiesProperties: [],
+      weeklyProperties: [],
       citiesInformation: [],
     };
   },
@@ -66,7 +61,7 @@ export default {
      * Selected city
      */
     onSelectedCity(selectedCities) {
-      this.selectedCities= selectedCities;
+      this.selectedCities = selectedCities;
       this.city = selectedCities.cityName;
       this.country = selectedCities.countryName;
       this.getCurrentWeather();
@@ -86,33 +81,33 @@ export default {
         .then((data) => {
           this.currentServer = data.data;
           let citiesServer = this.findCity();
-          this.setProperties(citiesServer );
+          this.setProperties(citiesServer);
         })
         .catch(() => {});
     },
 
     /**
-     * Find the city 
+     * Find the city
      */
     findCity() {
-      let citiesServer  = this.currentServer.find((cities) => {
+      let citiesServer = this.currentServer.find((cities) => {
         return cities.city_name === this.selectedCities.cityName;
       });
-      return citiesServer ;
+      return citiesServer;
     },
     /**
      * Set up properties from the cities request
      */
-    setProperties(citiesServer ) {
+    setProperties(citiesServer) {
       this.temperature = citiesServer.temp;
-      this.description = citiesServer .weather.description;
-      this.iconCurrent = citiesServer .weather.icon;
+      this.description = citiesServer.weather.description;
+      this.iconCurrent = citiesServer.weather.icon;
     },
     /**
      * Get dayly weather response
      */
     getDailyWeather() {
-      this.reset()
+      this.reset();
       fetch(
         `https://api.weatherbit.io/v2.0/forecast/daily?key=79bb1bf8c6394da3a3760df1b26bd53b&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}`
       )
@@ -125,9 +120,9 @@ export default {
             this.citiesInformation = result.data;
 
             for (let i = 0; i < this.citiesInformation.length; i++) {
-              const el = this.citiesInformation[i];
-              this.citiesProperties.push(el);
-              if (this.citiesProperties.length > 4) {
+              const element = this.citiesInformation[i];
+              this.weeklyProperties.push(element);
+              if (this.weeklyProperties.length > 4) {
                 break;
               }
             }
@@ -137,7 +132,7 @@ export default {
         .catch(() => {});
     },
     reset() {
-      this.citiesProperties = [];
+      this.weeklyProperties = [];
     },
   },
 };

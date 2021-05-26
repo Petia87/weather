@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: "CurrentForcast",
+  name: "CurrentForecast",
   props: ["temperature", "description", "iconCurrent"],
   computed: {
     imgUrl() {
