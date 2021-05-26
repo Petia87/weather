@@ -1,8 +1,8 @@
 <template>
-  <div class="cityTime">
-    <div class="cityTime__main">
-      <h2 class="cityTime__main__title">
-        <span class="cityTime__main__title__span"
+  <div class="city-time">
+    <div class="city-time__main">
+      <h2 class="city-time__main__title">
+        <span class="city-time__main__title__span"
           ><i class="fas fa-map-marker-alt"></i
         ></span>
         {{ city }}
@@ -10,11 +10,11 @@
           ><small> ({{ country }}) </small></i
         >
       </h2>
-      <div class="cityTime__main__currentDate">{{ currentDate }}</div>
+      <div class="city-time__main__current-date">{{ currentDate }}</div>
     </div>
-    <div class="cityTime__temp">
-      <button class="cityTime__temp__c"><sup>o</sup> C</button>
-      <button class="cityTime__temp__f"><sup>o</sup> F</button>
+    <div class="city-time__temp">
+      <button class="city-time__temp__c"><sup>o</sup> C</button>
+      <button class="city-time__temp__f"><sup>o</sup> F</button>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
       return moment().format("dddd, MMM DD - HH:mm");
     },
 
-    getNow: function () {
+    getNow() {
       const current = new Date();
       const date = `${current.getDay()}${[
         current.getMonth() + 1,
@@ -52,51 +52,51 @@ export default {
 </script>
 
 <style scoped>
-.cityTime {
+.city-time{
   display: flex;
   flex-direction: row;
 }
-.cityTime__main {
+.city-time__main {
   width: 70%;
   text-align: left;
   color: white;
   border-color: yellow;
   padding-left: 2rem;
 }
-.cityTime__temp {
+.city-time__temp {
   width: 30%;
   padding-top: 5rem;
 }
 .fa-map-marker-alt {
   color: rgb(251, 189, 8);
 }
-.cityTime__main__title__span {
+.city-time__main__title__span {
   margin-bottom: 0;
 }
-.cityTime__main__currentDate {
+.city-time__main__current-date {
   padding-left: 1.2rem;
   font-size: 1rem;
 }
-.cityTime__main__title {
+.city-time__main__title {
   margin-bottom: 0.3rem;
 }
-.cityTime__temp__c,
-.cityTime__temp__f {
+.city-time__temp__c,
+.city-time__temp__f {
   border: none;
   background-color: rgb(202, 203, 205);
   color: black;
   padding: 0.3rem 0.8rem;
 }
-.cityTime__temp__c {
+.city-time__temp__c {
   border-top-left-radius: 10%;
   border-bottom-left-radius: 10%;
 }
-.cityTime__temp__f {
+.city-time__temp__f {
   border-top-right-radius: 10%;
   border-bottom-right-radius: 10%;
 }
-.cityTime__temp__c,
-.cityTime__temp__f:hover {
+.city-time__temp__c,
+.city-time__temp__f:hover {
   border: none;
   background-color: rgb(14, 164, 50);
   color: rgb(202, 203, 205);

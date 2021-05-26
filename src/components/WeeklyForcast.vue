@@ -1,8 +1,8 @@
 <template>
-  <div class="weekForcast">
-    <p class="weekForcast__day">{{ format(day) }}</p>
-    <p class="weekForcast__img"><img v-bind:src="imgUrl" alt="" /></p>
-    <p class="weekForcast__degree">{{ minT }} <sup>o</sup> <span class="weekForcast--degree">{{ maxT }}<sup>o</sup></span></p>
+  <div class="weekly-forcast">
+    <p class="weekly-forcast__day">{{ format(day) }}</p>
+    <p class="weekly-forcast__img"><img v-bind:src="imgUrl" alt="" /></p>
+    <p class="weekly-forcast__degree">{{ minT }} <sup>o</sup> <span class="weekly-forcast--degree">{{ maxT }}<sup>o</sup></span></p>
     
   </div>
 </template>
@@ -10,7 +10,7 @@
 <script>
 import moment from "moment";
 export default {
-  name: "WeekForcast",
+  name: "WeeklyForcast",
   props: ["day", "icon", "minT", "maxT"],
 
   computed: {
@@ -28,30 +28,30 @@ export default {
 </script>
 
 <style scoped>
-.weekForcast {
+.weekly-forcast {
   width:20%;
   border-right: 1px dotted rgb(80, 93, 100);
   box-sizing: border-box;
   background: rgb(36, 40, 42);
   color: azure;
 }
-.weekForcast__img {
+.weekly-forcast__img {
   width: 100%;
 }
-.weekForcast__day{
+.weekly-forcast__day{
   text-transform: uppercase;
   font-size: 1.5rem;
 }
-.weekForcast__degree{
+.weekly-forcast__degree{
   font-size: 1.5rem;
   font-weight: bold;
   color: rgb(247, 197, 35);
 }
-.weekForcast--degree{
+.weekly-forcast--degree{
   color: white;
 }
 @media (max-width: 675px) {
-  .weekForcast {
+  .weekly-forcast {
     border: none;
     text-align: center;
   }

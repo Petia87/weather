@@ -1,16 +1,16 @@
 <template>
-  <div class="pageMain">
-    <DropDown @selectedCity="onSelectedCity" />
+  <div class="page-main">
+    <DropDown @SelectedCity="onSelectedCity" />
     <CityTime v-bind:city="city" v-bind:country="country" />
     <CurrentForcast
-      v-bind:temp="temp"
+      v-bind:temperature="temperature"
       v-bind:description="description"
       v-bind:iconCurrent="iconCurrent"
     />
 
-    <div v-if="citiesReq.length > 0" class="pageMain__weekForcast">
-      <WeekForcast
-        v-for="el in citiesProp"
+    <div v-if="citiesInformation.length > 0" class="page-main__weekly-forcast">
+      <WeeklyForcast
+        v-for="el in citiesProperties"
         :key="el"
         v-bind:day="el.datetime"
         v-bind:icon="el.weather.icon"
@@ -26,7 +26,7 @@ import moment from "moment";
 import DropDown from "./DropDown.vue";
 import CityTime from "./CityTime.vue";
 import CurrentForcast from "./CurrentForcast.vue";
-import WeekForcast from "./WeekForcast.vue";
+import WeeklyForcast from "./WeeklyForcast.vue";
 
 export default {
   name: "ThePage",
@@ -35,7 +35,7 @@ export default {
     DropDown,
     CityTime,
     CurrentForcast,
-    WeekForcast,
+    WeeklyForcast,
   },
 
   data: function () {
@@ -44,11 +44,11 @@ export default {
       country: "",
       selectedCities: [],
       date: "",
-      temp: 0,
+      temperature: 0,
       description: "",
       iconCurrent: "",
-      citiesProp: [],
-      citiesReq: [],
+      citiesProperties: [],
+      citiesInformation: [],
     };
   },
   created() {
@@ -66,17 +66,17 @@ export default {
      * Selected city
      */
     onSelectedCity(selectedCities) {
-      this.selectedCities = selectedCities;
+      this.selectedCities= selectedCities;
       this.city = selectedCities.cityName;
       this.country = selectedCities.countryName;
-      this.getCurrentWeatherResponse();
-      this.getDailyWeatherResponse();
+      this.getCurrentWeather();
+      this.getDailyWeather();
     },
 
     /**
      * Get current weather response
      */
-    getCurrentWeatherResponse() {
+    getCurrentWeather() {
       fetch(
         `https://api.weatherbit.io/v2.0/current?key=79bb1bf8c6394da3a3760df1b26bd53b&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}`
       )
@@ -84,34 +84,34 @@ export default {
           return response.json();
         })
         .then((data) => {
-          this.currentRequest = data.data;
-          let citiesRequest = this.findCity();
-          this.setProperties(citiesRequest );
+          this.currentServer = data.data;
+          let citiesServer = this.findCity();
+          this.setProperties(citiesServer );
         })
         .catch(() => {});
     },
 
     /**
-     * Find the city wiht selected name and compare with response
+     * Find the city 
      */
     findCity() {
-      let citiesRequest  = this.currentRequest.find((cities) => {
+      let citiesServer  = this.currentServer.find((cities) => {
         return cities.city_name === this.selectedCities.cityName;
       });
-      return citiesRequest ;
+      return citiesServer ;
     },
     /**
      * Set up properties from the cities request
      */
-    setProperties(citiesRequest ) {
-      this.temp = citiesRequest .temp;
-      this.description = citiesRequest .weather.description;
-      this.iconCurrent = citiesRequest .weather.icon;
+    setProperties(citiesServer ) {
+      this.temperature = citiesServer.temp;
+      this.description = citiesServer .weather.description;
+      this.iconCurrent = citiesServer .weather.icon;
     },
     /**
      * Get dayly weather response
      */
-    getDailyWeatherResponse() {
+    getDailyWeather() {
       this.reset()
       fetch(
         `https://api.weatherbit.io/v2.0/forecast/daily?key=79bb1bf8c6394da3a3760df1b26bd53b&city=${this.selectedCities.cityName}&country=${this.selectedCities.countryCode}`
@@ -122,12 +122,12 @@ export default {
 
         .then((result) => {
           if (result.city_name === this.selectedCities.cityName) {
-            this.citiesReq = result.data;
+            this.citiesInformation = result.data;
 
-            for (let i = 0; i < this.citiesReq.length; i++) {
-              const el = this.citiesReq[i];
-              this.citiesProp.push(el);
-              if (this.citiesProp.length > 4) {
+            for (let i = 0; i < this.citiesInformation.length; i++) {
+              const el = this.citiesInformation[i];
+              this.citiesProperties.push(el);
+              if (this.citiesProperties.length > 4) {
                 break;
               }
             }
@@ -137,20 +137,20 @@ export default {
         .catch(() => {});
     },
     reset() {
-      this.citiesProp = [];
+      this.citiesProperties = [];
     },
   },
 };
 </script>
 
 <style>
-.pageMain {
+.page-main {
   background: rgb(27, 31, 33);
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-.pageMain__weekForcast {
+.page-main__weekly-forcast {
   display: flex;
   flex-direction: row;
   background: rgb(36, 40, 42);
@@ -159,7 +159,7 @@ export default {
   margin: 3%;
 }
 @media (max-width: 675px) {
-  .pageMain__weekForcast {
+  .page-main__week-forcast {
     flex-direction: column;
     border: none;
   }
